@@ -3,7 +3,8 @@ from datetime import datetime
 from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask (__name__)
-app.secret_key = "randomstring123" # Helps generate session ID 
+app.secret_key = os.getenv("SECRET", "randomstring123")  
+""" Secret key changed to an environment variable. Helps generate session ID """
 messages = []
 
 def add_message(username, message):
@@ -38,5 +39,6 @@ def user(username):
     
     return render_template("chat.html", username = username, chat_messages = messages)
     
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+app.run(host=os.getenv('IP', "0.0.0.0"), port=int(os.getenv('PORT', "5000")), debug=False) # debug=False for production. 
+""" Fallback values for IP = 0.0.0.0 & PORT = 5000 """
 
